@@ -1,15 +1,11 @@
-import localFont from "next/font/local";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+// Import the Outfit font
+const outfit = Outfit({
+  subsets: ["latin"], // Specify subsets based on your needs
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"], // Include the weights you need
+  variable: "--font-outfit", // Optional: Add a custom variable for the font
 });
 
 export const metadata = {
@@ -20,11 +16,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
-      </body>
+      <body className={`${outfit.variable} antialiased`}>{children}</body>
     </html>
   );
 }
