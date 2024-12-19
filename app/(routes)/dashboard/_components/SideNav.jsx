@@ -50,6 +50,7 @@ const menuList=[
       <h2 
         className={`flex gap-2 items-center
           text-grey-500 font-medium
+          mb-2
           p-5 cursor-pointer rounded-md
           hover:text-primary hover:bg-blue-100 
           ${path === menu.path ? 'text-primary bg-blue-100' : ''}
