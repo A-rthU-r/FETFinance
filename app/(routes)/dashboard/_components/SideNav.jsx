@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import Image from "next/image"
+import Link from "next/link"
 import { LayoutGrid, PiggyBank, ReceiptText, ShieldCheck } from 'lucide-react'
 import { UserButton } from '@clerk/nextjs'
 import { usePathname } from 'next/navigation'
@@ -34,12 +35,12 @@ const menuList=[
   const path=usePathname();
 
   useEffect(()=>{
-    consol.log(path)
+    console.log(path)
   },[path])
 
   return (
     <div className='h-screen p-5 border shadow-sm'>
-        <Image src={'/logo.svg'}
+        <Image src={'/logo.png'}
         alt='logo'
         width={160}
         height={100}

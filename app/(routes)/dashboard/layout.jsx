@@ -6,11 +6,15 @@ import { db } from '@/utils/dbConfig'
 import { Budgets } from '@/utils/schema'
 import { useUser } from '@clerk/nextjs'
 import { eq } from 'drizzle-orm'
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+
+
 
 function DashboardLayout({children}) {
 
   const {user}=useUser();
-  const router=useRouter();
+  const router=useRouter;
 
   useEffect(()=>{
     user&&checkUserBudgets();

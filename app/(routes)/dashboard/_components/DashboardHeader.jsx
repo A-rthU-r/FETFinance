@@ -1,4 +1,6 @@
 import React from 'react'
+import { UserButton } from '@clerk/nextjs';
+
 
 function DashboardHeader() {
   return (
