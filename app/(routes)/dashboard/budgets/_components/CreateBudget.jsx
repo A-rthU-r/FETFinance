@@ -1,4 +1,6 @@
-import React from 'react'
+"use client"
+import React, { useState } from 'react';
+import EmojiPicker from 'emoji-picker-react';
 import {
   Dialog,
   DialogContent,
@@ -6,10 +8,42 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
+  DialogFooter,
+  DialogClose,
+} from "@/components/ui/dialog";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { db } from '@/utils/dbConfig';
+import { Budgets } from '@/utils/schema';
+import { useUser } from '@clerk/nextjs';
+import { toast } from 'sonner';
+
 
 
 function CreateBudget() {
+
+    const [emojiIcon,setEmojiIcon]=useState('😀');
+    const [ openEmojiPicker,setOpenEmojiPicker]=useState(false);
+
+    const [name,setName]=useState();
+    const [amount,setAmount]=useState();
+
+    const {user}=useUser();
+    const onCreateBudget=async()=>{
+      const result=await db.insert(Budgets)
+      .values({
+        name:name,
+        amount:amount,
+        createdBy:user?.primaryEmailAddress?.emailAddress,
+        icon:emojiIcon
+      }).returning({insertedId:Budgets.id})
+
+      if (result) 
+      {
+        toast('New Budget Created!')
+      }
+    }
+
   return (
     <div>
           <Dialog>
@@ -23,12 +57,51 @@ function CreateBudget() {
                 </DialogTrigger>
                 <DialogContent>
                   <DialogHeader>
-                    <DialogTitle>Are you absolutely sure?</DialogTitle>
+                    <DialogTitle>Create New Budget</DialogTitle>
                     <DialogDescription>
-                      This action cannot be undone. This will permanently delete your account
-                      and remove your data from our servers.
+                    <div className='mt-5'>npx shadcn@latest add input
+
+                        <Button variant="outline"
+                        className="text-lg"
+                        onClick={()=>setOpenEmojiPicker(!openEmojiPicker)}
+                        >{emojiIcon}</Button>
+                        <div className='absolute'>
+                          <EmojiPicker
+                          open={openEmojiPicker}
+                          onEmojiClick={(e)=>{
+                            setEmojiIcon(e.emoji)
+                            setOpenEmojiPicker(false)
+                          }}
+                          />
+                          
+                        </div>
+                        <div className='mt-2'>
+                          <h2 className='text-black font-medium my-1'>Budget Name</h2>
+                          <Input placeholder="e.g Q1 Marketing"
+                          onChange={(e)=>setName(e.target.value)} />                       
+                        </div>
+
+                        <div className='mt-2'>
+                          <h2 className='text-black font-medium my-1'>Budget Amount</h2>
+                          <Input 
+                          type="number"
+                          placeholder="$5000"
+                          onChange={(e)=>setAmount(e.target.value)} />
+                        </div>
+                                                    
+                    </div>
                     </DialogDescription>
                   </DialogHeader>
+
+                  <DialogFooter className="sm:justify-start">
+                    <DialogClose asChild>
+                    <Button 
+                        disabled={!(name&&amount)}
+                        onClick={()=>onCreateBudget()}
+                        className="mt-5 w-full"> Create Budget</Button>
+                    </DialogClose>
+                  </DialogFooter>
+
                 </DialogContent>
         </Dialog>
 

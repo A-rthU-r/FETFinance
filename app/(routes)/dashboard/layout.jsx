@@ -14,20 +14,22 @@ import { useEffect, useState } from 'react';
 function DashboardLayout({children}) {
 
   const {user}=useUser();
-  const router=useRouter;
+  const router = useRouter();
 
   useEffect(()=>{
     user&&checkUserBudgets();
   },[user])
-
+   
   const checkUserBudgets=async()=>{
     const result=await db.select()
     .from(Budgets)
     .where(eq(Budgets.createdBy,user?.primaryEmailAddress?.emailAddress))
+
     console.log(result);
+
     if(result?.length==0)
     {
-      router.replace('/dashboard/budgets')
+      router.replace("/dashboard/budgets");
     }
   }
   return (
